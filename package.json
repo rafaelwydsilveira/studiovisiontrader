@@ -6,13 +6,9 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "lint": "turbo lint",
-    "clean": "turbo clean"
-  },
-  "devDependencies": {
-    "turbo": "^2.0.0"
+    "dev": "cd apps/web && npx next dev",
+    "build:web": "cd apps/web && npx prisma generate && npx next build",
+    "start": "cd apps/web && npx next start"
   },
   "packageManager": "npm@10.0.0"
 }
