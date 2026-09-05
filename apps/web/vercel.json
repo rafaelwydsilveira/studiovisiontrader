@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../.. && npm run build -- --filter=@study-analyzer/web",
+  "buildCommand": "cd ../.. && npm install && cd apps/web && npx prisma generate && npx next build",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "cd ../.. && npm install"
