@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd ../.. && npm run build -- --filter=@study-analyzer/web",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "cd ../.. && npm install"
+}

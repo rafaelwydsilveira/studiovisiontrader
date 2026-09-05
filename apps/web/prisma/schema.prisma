@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Analysis {
+  id              String   @id @default(cuid())
+  fileName        String
+  timeframe       String
+  imageData       String?
+  direction       String
+  confidence      Int
+  tendency        String
+  risk            String
+  tendencyDesc    String
+  indicators      String   @default("[]")
+  patterns        String   @default("[]")
+  supportLevel    String
+  resistanceLevel String
+  volatility      String
+  recommendation  String
+  entryTime       String
+  warning         String
+  justification   String
+  createdAt       DateTime @default(now())
+  feedback        Feedback?
+}
+
+model Feedback {
+  id         String   @id @default(cuid())
+  analysisId String   @unique
+  analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  result     String
+  comment    String?
+  createdAt  DateTime @default(now())
+}
+
+model PerformanceSnapshot {
+  id                 String   @id @default(cuid())
+  date               DateTime @default(now())
+  totalAnalyses      Int
+  wins               Int
+  losses             Int
+  hitRate            Float
+  efficiency         Float
+  consistency        Float
+  neuralCalibration  Float
+}
+
+model AILesson {
+  id            String   @id @default(cuid())
+  hitRate       Float
+  totalAnalyses Int
+  wins          Int
+  losses        Int
+  patterns      String   @default("[]")
+  mistakes      String   @default("[]")
+  improvements  String   @default("[]")
+  prompt        String   @default("")
+  createdAt     DateTime @default(now())
+}

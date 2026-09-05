@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String
+  passwordHash  String
+  plan          String    @default("free")
+  avatarUrl     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  analyses      Analysis[]
+  settings      UserSettings?
+  watchlists    Watchlist[]
+}
+
+model Analysis {
+  id                String            @id @default(uuid())
+  userId            String
+  imageUrl          String
+  originalFilename  String?
+  market            String?
+  asset             String?
+  timeframe         String?
+  status            String            @default("pending")
+  processingTimeMs  Int?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  result            AnalysisResult?
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([status])
+}
+
+model AnalysisResult {
+  id                String    @id @default(uuid())
+  analysisId        String    @unique
+  direction         String
+  confidence        Float
+  assetDetected     String?
+  timeframeDetected String?
+  entryPoint        Float?
+  stopLoss          Float?
+  takeProfit        Float?
+  patterns          String    @default("[]")
+  supportLevels     String    @default("[]")
+  resistanceLevels  String    @default("[]")
+  trend             String
+  justification     String
+  explanation       String?
+  rawAiResponse     String?
+  createdAt         DateTime  @default(now())
+
+  analysis          Analysis  @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+}
+
+model UserSettings {
+  id              String    @id @default(uuid())
+  userId          String    @unique
+  language        String    @default("pt")
+  theme           String    @default("dark")
+  notifications   Boolean   @default(true)
+  defaultMarket   String    @default("forex")
+  defaultTimeframe String   @default("1h")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Watchlist {
+  id        String   @id @default(uuid())
+  userId    String
+  name      String
+  assets    String   @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
