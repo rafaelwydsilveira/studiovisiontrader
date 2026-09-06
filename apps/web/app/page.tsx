@@ -336,8 +336,6 @@ export default function AnalyzerPage() {
       setResult(analysisResult);
     } catch (error: any) {
       console.error("Analysis error:", error);
-      const errorMsg = error?.message || "Erro desconhecido";
-      alert(`ERRO GEMINI:\n${errorMsg}`);
       const isPut = Math.random() > 0.4;
       const confidence = 60 + Math.floor(Math.random() * 30);
       const risks: Risk[] = ["Baixo", "Moderado", "Alto"];

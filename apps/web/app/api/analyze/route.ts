@@ -200,7 +200,7 @@ Timeframe: ${timeframe} minutos.
 Analise velas, indicadores, suporte/resistência, tendência, volume e volatilidade.
 Considere OBRIGATORIAMENTE o relatório de performance acima para melhorar suas previsões.`;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -214,7 +214,7 @@ Considere OBRIGATORIAMENTE o relatório de performance acima para melhorar suas 
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Gemini API error:", response.status, errorText);
-      return NextResponse.json({ error: `Erro Gemini ${response.status}: ${errorText.substring(0, 200)}` }, { status: 500 });
+      return NextResponse.json({ error: `Erro na API do Gemini: ${response.status}`, details: errorText }, { status: 500 });
     }
 
     const data = await response.json();
