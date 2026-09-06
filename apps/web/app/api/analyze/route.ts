@@ -200,7 +200,7 @@ Timeframe: ${timeframe} minutos.
 Analise velas, indicadores, suporte/resistência, tendência, volume e volatilidade.
 Considere OBRIGATORIAMENTE o relatório de performance acima para melhorar suas previsões.`;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const response = await fetch(apiUrl, {
       method: "POST",
