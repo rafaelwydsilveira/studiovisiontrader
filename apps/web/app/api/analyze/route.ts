@@ -222,8 +222,8 @@ Considere OBRIGATORIAMENTE o relatório de performance acima para melhorar suas 
     }
 
     const data = await response.json();
-    const parts = data.candidates?.[0]?.content?.parts || [];
-    const text = parts.find((p: any) => p.text && !p.thought)?.text || parts[0]?.text || "";
+    const responseParts = data.candidates?.[0]?.content?.parts || [];
+    const text = responseParts.find((p: any) => p.text && !p.thought)?.text || responseParts[0]?.text || "";
 
     if (!text) {
       return NextResponse.json({ error: "Resposta vazia da API" }, { status: 500 });
