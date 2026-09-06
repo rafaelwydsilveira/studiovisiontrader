@@ -688,6 +688,14 @@ export default function AnalyzerPage() {
                         <XCircle className="mr-2 h-4 w-4" /> Errei
                       </Button>
                     </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" onClick={deleteAnalysis} className="border-[#1e1e28] text-red-400 hover:bg-red-500/10 hover:border-red-500/50">
+                        <Trash2 className="mr-2 h-4 w-4" /> Rejeitar
+                      </Button>
+                      <Button variant="outline" onClick={() => { setResult(null); setCurrentAnalysisId(null); }} className="border-[#1e1e28] text-gray-300 hover:bg-gray-500/10">
+                        <XOctagon className="mr-2 h-4 w-4" /> Fechar
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
