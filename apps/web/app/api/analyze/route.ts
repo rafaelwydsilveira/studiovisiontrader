@@ -3,8 +3,6 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
 async function buildPerformanceContext(): Promise<{ context: string; hitRate: number }> {
   const allAnalyses = await prisma.analysis.findMany({
     include: { feedback: true },
@@ -154,6 +152,7 @@ REGRAS GERAIS:
 
 export async function POST(request: NextRequest) {
   try {
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
     if (!GEMINI_API_KEY) {
       return NextResponse.json({ error: "Chave da API Gemini não configurada" }, { status: 500 });
     }

@@ -334,8 +334,10 @@ export default function AnalyzerPage() {
         if (saveData.success && saveData.analysis) setCurrentAnalysisId(saveData.analysis.id);
       } catch (saveError) { console.error("Error saving analysis:", saveError); }
       setResult(analysisResult);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Analysis error:", error);
+      const errorMsg = error?.message || "Erro desconhecido";
+      alert(`Erro na análise: ${errorMsg}`);
       const isPut = Math.random() > 0.4;
       const confidence = 60 + Math.floor(Math.random() * 30);
       const risks: Risk[] = ["Baixo", "Moderado", "Alto"];
@@ -351,7 +353,7 @@ export default function AnalyzerPage() {
         recommendation: isPut ? "VENDA (PUT)" : "COMPRA (CALL)",
         timeframe: timeframes.find((t) => t.value === timeframe)?.label?.toUpperCase() || "5 MINUTOS",
         entryTime: getEntryTime(timeframe),
-        warning: "API indisponível - usando dados simulados",
+        warning: `API indisponível: ${errorMsg}`,
       };
       try {
         const saveResponse = await fetch("/api/analyses", {
