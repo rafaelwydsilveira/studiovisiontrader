@@ -207,7 +207,11 @@ Considere OBRIGATORIAMENTE o relatório de performance acima para melhorar suas 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }, { inlineData: { mimeType, data: base64Data } }] }],
-        generationConfig: { temperature: hitRate < 60 ? 0.2 : 0.4, maxOutputTokens: 2048 },
+        generationConfig: {
+          temperature: hitRate < 60 ? 0.2 : 0.4,
+          maxOutputTokens: 4096,
+          thinkingConfig: { thinkingLevel: "minimal" },
+        },
       }),
     });
 
@@ -218,7 +222,8 @@ Considere OBRIGATORIAMENTE o relatório de performance acima para melhorar suas 
     }
 
     const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const parts = data.candidates?.[0]?.content?.parts || [];
+    const text = parts.find((p: any) => p.text && !p.thought)?.text || parts[0]?.text || "";
 
     if (!text) {
       return NextResponse.json({ error: "Resposta vazia da API" }, { status: 500 });
