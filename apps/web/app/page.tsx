@@ -351,7 +351,7 @@ export default function AnalyzerPage() {
         recommendation: isPut ? "VENDA (PUT)" : "COMPRA (CALL)",
         timeframe: timeframes.find((t) => t.value === timeframe)?.label?.toUpperCase() || "5 MINUTOS",
         entryTime: getEntryTime(timeframe),
-        warning: `API indisponível: ${errorMsg}`,
+        warning: "API indisponível - usando dados simulados",
       };
       try {
         const saveResponse = await fetch("/api/analyses", {
