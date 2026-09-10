@@ -23,6 +23,7 @@ import {
   Activity,
   Zap,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type Direction = "CALL" | "PUT" | null;
 type Risk = "Baixo" | "Moderado" | "Alto";
@@ -107,12 +108,12 @@ function CircularProgress({ value, color, icon }: { value: number; color: string
     <div className="flex flex-col items-center">
       <div className="relative w-24 h-24">
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r={radius} fill="none" stroke="#1a1a24" strokeWidth="8" />
+          <circle cx="50" cy="50" r={radius} fill="none" className="stroke-border" strokeWidth="8" />
           <circle cx="50" cy="50" r={radius} fill="none" stroke={color} strokeWidth="8" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} className="transition-all duration-1000 ease-out" />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div className="mb-0.5">{icon}</div>
-          <span className="text-xl font-bold text-white">{value}%</span>
+          <span className="text-xl font-bold text-foreground">{value}%</span>
         </div>
       </div>
     </div>
@@ -130,16 +131,16 @@ function TriangleRadar({ metrics }: { metrics: PerformanceMetrics }) {
   return (
     <div className="relative">
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <polygon points={`${centerX},${centerY - radius} ${centerX + radius * 0.866},${centerY + radius * 0.5} ${centerX - radius * 0.866},${centerY + radius * 0.5}`} fill="none" stroke="#1a1a24" strokeWidth="1" />
-        <polygon points={`${centerX},${centerY - radius * 0.66} ${centerX + radius * 0.577},${centerY + radius * 0.33} ${centerX - radius * 0.577},${centerY + radius * 0.33}`} fill="none" stroke="#1a1a24" strokeWidth="1" />
-        <polygon points={`${centerX},${centerY - radius * 0.33} ${centerX + radius * 0.289},${centerY + radius * 0.165} ${centerX - radius * 0.289},${centerY + radius * 0.165}`} fill="none" stroke="#1a1a24" strokeWidth="1" />
+        <polygon points={`${centerX},${centerY - radius} ${centerX + radius * 0.866},${centerY + radius * 0.5} ${centerX - radius * 0.866},${centerY + radius * 0.5}`} fill="none" className="stroke-border" strokeWidth="1" />
+        <polygon points={`${centerX},${centerY - radius * 0.66} ${centerX + radius * 0.577},${centerY + radius * 0.33} ${centerX - radius * 0.577},${centerY + radius * 0.33}`} fill="none" className="stroke-border" strokeWidth="1" />
+        <polygon points={`${centerX},${centerY - radius * 0.33} ${centerX + radius * 0.289},${centerY + radius * 0.165} ${centerX - radius * 0.289},${centerY + radius * 0.165}`} fill="none" className="stroke-border" strokeWidth="1" />
         <polygon points={`${hitRatePoint.x},${hitRatePoint.y} ${efficiencyPoint.x},${efficiencyPoint.y} ${consistencyPoint.x},${consistencyPoint.y}`} fill="rgba(34, 197, 94, 0.2)" stroke="#22c55e" strokeWidth="2" />
         <circle cx={hitRatePoint.x} cy={hitRatePoint.y} r="4" fill="#22c55e" />
         <circle cx={efficiencyPoint.x} cy={efficiencyPoint.y} r="4" fill="#22c55e" />
         <circle cx={consistencyPoint.x} cy={consistencyPoint.y} r="4" fill="#22c55e" />
-        <text x={centerX} y={centerY - radius - 10} textAnchor="middle" fill="#9ca3af" fontSize="10">Taxa de Acerto</text>
-        <text x={centerX + radius + 10} y={centerY + radius + 5} textAnchor="start" fill="#9ca3af" fontSize="10">Eficiência</text>
-        <text x={centerX - radius - 10} y={centerY + radius + 5} textAnchor="end" fill="#9ca3af" fontSize="10">Consistência</text>
+        <text x={centerX} y={centerY - radius - 10} textAnchor="middle" className="fill-muted-foreground" fontSize="10">Taxa de Acerto</text>
+        <text x={centerX + radius + 10} y={centerY + radius + 5} textAnchor="start" className="fill-muted-foreground" fontSize="10">Eficiência</text>
+        <text x={centerX - radius - 10} y={centerY + radius + 5} textAnchor="end" className="fill-muted-foreground" fontSize="10">Consistência</text>
       </svg>
     </div>
   );
@@ -414,37 +415,38 @@ export default function AnalyzerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08080c]">
+    <div className="min-h-screen bg-background">
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-center mb-8">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#121218] border border-[#1e1e28] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-card border border-border flex items-center justify-center">
               <Activity className="w-5 h-5 text-green-500" />
             </div>
             <h1 className="text-xl font-bold tracking-tight" style={{ fontFamily: "monospace" }}>
-              <span className="text-green-500">Study</span> <span className="text-white">Analyzer</span>
+              <span className="text-green-500">Study</span> <span className="text-foreground">Analyzer</span>
             </h1>
           </div>
+          <ThemeToggle />
         </div>
 
         {/* Date/Time */}
         <div className="flex justify-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#121218] border border-[#1e1e28]">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border">
             <Clock className="w-4 h-4 text-green-500" />
-            <span className="text-sm text-gray-300">{getCurrentDate()}</span>
-            <span className="text-gray-600">•</span>
+            <span className="text-sm text-muted-foreground">{getCurrentDate()}</span>
+            <span className="text-muted-foreground/60">•</span>
             <span className="text-sm text-green-500 font-mono">{getCurrentTime()}</span>
           </div>
         </div>
 
         {/* Timeframe Selector */}
         <div className="mb-6">
-          <label className="text-sm text-gray-400 mb-2 block">Selecione o timeframe do gráfico</label>
+          <label className="text-sm text-muted-foreground mb-2 block">Selecione o timeframe do gráfico</label>
           <select
             value={timeframe}
             onChange={(e) => setTimeframe(e.target.value)}
-            className="w-full bg-[#121218] border border-[#1e1e28] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-green-500 transition-colors"
+            className="w-full bg-card border border-border rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-green-500 transition-colors"
           >
             {timeframes.map((tf) => (
               <option key={tf.value} value={tf.value}>{tf.label}</option>
@@ -454,20 +456,20 @@ export default function AnalyzerPage() {
 
         {/* Upload Area */}
         <Card
-          className="bg-[#121218] border-2 border-dashed border-green-500/30 hover:border-green-500/50 transition-colors mb-6"
+          className="bg-card border-2 border-dashed border-green-500/30 hover:border-green-500/50 transition-colors mb-6"
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
         >
           <CardContent className="p-6">
             {image ? (
               <div className="relative">
-                <div className="relative rounded-lg overflow-hidden bg-[#08080c]">
+                <div className="relative rounded-lg overflow-hidden bg-background">
                   <img src={image} alt="Gráfico" className="w-full max-h-[500px] object-contain" />
                 </div>
                 <div className="mt-3 flex items-center justify-between">
-                  <p className="text-sm text-gray-400 truncate max-w-[200px]">{fileName}</p>
+                  <p className="text-sm text-muted-foreground truncate max-w-[200px]">{fileName}</p>
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" onClick={removeImage} className="text-gray-400 hover:text-red-400">
+                    <Button variant="ghost" size="sm" onClick={removeImage} className="text-muted-foreground hover:text-red-400">
                       <X className="mr-1 h-4 w-4" /> Remover
                     </Button>
                     <Button size="sm" onClick={analyzeImage} disabled={isAnalyzing} className="bg-green-500 hover:bg-green-600 text-black">
@@ -485,26 +487,26 @@ export default function AnalyzerPage() {
                 <input id="file-input" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                 <Upload className="w-16 h-16 text-green-500 mb-4" />
                 <h2 className="text-xl font-bold text-green-500 mb-2" style={{ fontFamily: "monospace" }}>Envie o print do gráfico</h2>
-                <p className="text-gray-400 mb-4">Arraste e solte ou clique para selecionar</p>
+                <p className="text-muted-foreground mb-4">Arraste e solte ou clique para selecionar</p>
                 <div className="flex items-center gap-2 text-sm text-green-500 mb-2">
                   <span className="text-lg">📋</span>
                   <span>Ou pressione Ctrl+V para colar uma imagem</span>
                 </div>
-                <p className="text-xs text-gray-500">Formatos aceitos: JPG, PNG, WEBP</p>
+                <p className="text-xs text-muted-foreground">Formatos aceitos: JPG, PNG, WEBP</p>
               </div>
             )}
           </CardContent>
         </Card>
 
         {/* Description */}
-        <p className="text-center text-sm text-gray-500 mb-8">
+        <p className="text-center text-sm text-muted-foreground mb-8">
           A única inteligência artificial do mundo especializada em análise gráfica, desenvolvida para transformar traders em operadores lucrativos.
         </p>
 
         {/* Analysis Result */}
         {result && (
           <div className="mb-6">
-            <Card className="bg-[#121218] border border-[#1e1e28]">
+            <Card className="bg-card border border-border">
               <CardContent className="p-6">
                 <div className="space-y-4">
                   {/* Signal Header */}
@@ -519,127 +521,127 @@ export default function AnalyzerPage() {
                         Sinal de {result.signalType}
                       </h2>
                     </div>
-                    <p className="text-sm text-gray-400">{result.tendencyDescription}</p>
+                    <p className="text-sm text-muted-foreground">{result.tendencyDescription}</p>
                   </div>
 
                   {/* Confidence Badge */}
                   <div className="flex justify-center">
                     <div className={`inline-flex items-center px-6 py-3 rounded-full ${result.direction === "PUT" ? "bg-red-500" : "bg-green-500"}`}>
-                      <span className="text-xl font-bold text-white">{result.confidence}% Confiante</span>
+                      <span className="text-xl font-bold text-foreground">{result.confidence}% Confiante</span>
                     </div>
                   </div>
 
                   {/* Tags */}
                   <div className="flex items-center justify-center gap-4">
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#08080c] border border-[#1e1e28]">
-                      <span className="text-xs text-gray-400">Tendência:</span>
-                      <span className="text-xs text-white font-medium">{result.tendency}</span>
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-background border border-border">
+                      <span className="text-xs text-muted-foreground">Tendência:</span>
+                      <span className="text-xs text-foreground font-medium">{result.tendency}</span>
                     </div>
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#08080c] border border-[#1e1e28]">
-                      <span className="text-xs text-gray-400">Risco:</span>
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-background border border-border">
+                      <span className="text-xs text-muted-foreground">Risco:</span>
                       <span className={`text-xs font-medium ${result.risk === "Alto" ? "text-red-400" : result.risk === "Moderado" ? "text-yellow-400" : "text-green-400"}`}>{result.risk}</span>
                     </div>
                   </div>
 
                   {/* Detailed Analysis */}
-                  <div className="p-4 rounded-lg bg-[#08080c] border border-[#1e1e28]">
+                  <div className="p-4 rounded-lg bg-background border border-border">
                     <h3 className="text-sm font-bold text-green-500 mb-3" style={{ fontFamily: "monospace" }}>ANÁLISE TÉCNICA DETALHADA</h3>
                     <div className="space-y-3">
                       <div className="flex items-start gap-2">
                         <AlertTriangle className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-white">{result.warning}</span>
+                        <span className="text-sm text-foreground">{result.warning}</span>
                       </div>
                       <div className="flex items-start gap-2">
                         <Settings className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-white">CONFIGURAÇÃO: Configure seu painel para timeframe de {result.timeframe}</span>
+                        <span className="text-sm text-foreground">CONFIGURAÇÃO: Configure seu painel para timeframe de {result.timeframe}</span>
                       </div>
                       <div className="flex items-start gap-2">
                         <Clock className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-white">ENTRADA NA PRÓXIMA VELA: {result.entryTime}</span>
+                        <span className="text-sm text-foreground">ENTRADA NA PRÓXIMA VELA: {result.entryTime}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Professional Analysis */}
-                  <div className="p-4 rounded-lg bg-[#08080c] border border-[#1e1e28]">
+                  <div className="p-4 rounded-lg bg-background border border-border">
                     <h3 className="text-sm font-bold text-green-500 mb-3" style={{ fontFamily: "monospace" }}>ANÁLISE TÉCNICA PROFISSIONAL</h3>
                     <div className="space-y-4">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <TrendingUp className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-white font-medium">TENDÊNCIA:</span>
+                          <span className="text-sm text-foreground font-medium">TENDÊNCIA:</span>
                         </div>
-                        <p className="text-sm text-gray-300 ml-6">{result.tendencyDescription}</p>
+                        <p className="text-sm text-muted-foreground ml-6">{result.tendencyDescription}</p>
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <BarChart3 className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-white font-medium">INDICADORES TÉCNICOS:</span>
+                          <span className="text-sm text-foreground font-medium">INDICADORES TÉCNICOS:</span>
                         </div>
                         <ul className="space-y-1 ml-6">
                           {result.indicators.map((ind, i) => (
-                            <li key={i} className="text-sm text-gray-300">• <span className="text-white font-medium">{ind.name}:</span> {ind.description}</li>
+                            <li key={i} className="text-sm text-muted-foreground">• <span className="text-foreground font-medium">{ind.name}:</span> {ind.description}</li>
                           ))}
                         </ul>
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <BarChart3 className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-white font-medium">PADRÕES GRÁFICOS:</span>
+                          <span className="text-sm text-foreground font-medium">PADRÕES GRÁFICOS:</span>
                         </div>
                         <ul className="space-y-1 ml-6">
                           {result.patterns.map((pattern, i) => (
-                            <li key={i} className="text-sm text-gray-300">• {pattern}</li>
+                            <li key={i} className="text-sm text-muted-foreground">• {pattern}</li>
                           ))}
                         </ul>
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <Target className="w-4 h-4 text-green-500" />
-                          <span className="text-sm text-white font-medium">NÍVEIS CHAVE:</span>
+                          <span className="text-sm text-foreground font-medium">NÍVEIS CHAVE:</span>
                         </div>
                         <ul className="space-y-1 ml-6">
-                          <li className="text-sm text-gray-300">• <span className="text-green-400">Suporte:</span> {result.levels.support}</li>
-                          <li className="text-sm text-gray-300">• <span className="text-red-400">Resistência:</span> {result.levels.resistance}</li>
-                          <li className="text-sm text-gray-300">• <span className="text-yellow-400">Volatilidade:</span> {result.levels.volatility}</li>
+                          <li className="text-sm text-muted-foreground">• <span className="text-green-400">Suporte:</span> {result.levels.support}</li>
+                          <li className="text-sm text-muted-foreground">• <span className="text-red-400">Resistência:</span> {result.levels.resistance}</li>
+                          <li className="text-sm text-muted-foreground">• <span className="text-yellow-400">Volatilidade:</span> {result.levels.volatility}</li>
                         </ul>
                       </div>
                     </div>
                   </div>
 
                   {/* Recommendation */}
-                  <div className="p-4 rounded-lg bg-[#08080c] border border-[#1e1e28]">
+                  <div className="p-4 rounded-lg bg-background border border-border">
                     <div className="flex items-center gap-2 mb-2">
                       <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span className="text-sm text-white font-bold" style={{ fontFamily: "monospace" }}>RECOMENDAÇÃO: {result.recommendation}</span>
+                      <span className="text-sm text-foreground font-bold" style={{ fontFamily: "monospace" }}>RECOMENDAÇÃO: {result.recommendation}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-4 mt-3">
                       <div>
-                        <span className="text-xs text-gray-400">Probabilidade estimada:</span>
-                        <p className="text-lg font-bold text-white">{result.confidence}%</p>
+                        <span className="text-xs text-muted-foreground">Probabilidade estimada:</span>
+                        <p className="text-lg font-bold text-foreground">{result.confidence}%</p>
                       </div>
                       <div>
-                        <span className="text-xs text-gray-400">Timeframe:</span>
-                        <p className="text-lg font-bold text-white">{result.timeframe}</p>
+                        <span className="text-xs text-muted-foreground">Timeframe:</span>
+                        <p className="text-lg font-bold text-foreground">{result.timeframe}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Support & Resistance */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-lg bg-[#08080c] border border-[#1e1e28]">
+                    <div className="p-4 rounded-lg bg-background border border-border">
                       <h4 className="text-xs font-bold text-green-500 mb-2" style={{ fontFamily: "monospace" }}>SUPORTE</h4>
-                      <p className="text-sm text-gray-300">{result.levels.support}</p>
+                      <p className="text-sm text-muted-foreground">{result.levels.support}</p>
                     </div>
-                    <div className="p-4 rounded-lg bg-[#08080c] border border-[#1e1e28]">
+                    <div className="p-4 rounded-lg bg-background border border-border">
                       <h4 className="text-xs font-bold text-red-400 mb-2" style={{ fontFamily: "monospace" }}>RESISTÊNCIA</h4>
-                      <p className="text-sm text-gray-300">{result.levels.resistance}</p>
+                      <p className="text-sm text-muted-foreground">{result.levels.resistance}</p>
                     </div>
                   </div>
 
                   {/* Patterns Badges */}
                   <div>
-                    <p className="text-xs text-gray-500 mb-2">PADRÕES IDENTIFICADOS</p>
+                    <p className="text-xs text-muted-foreground mb-2">PADRÕES IDENTIFICADOS</p>
                     <div className="flex flex-wrap gap-2">
                       {result.patterns.map((p, i) => (
                         <Badge key={i} className="bg-green-500/20 text-green-400 border-0">{p}</Badge>
@@ -655,44 +657,44 @@ export default function AnalyzerPage() {
         {/* Feedback Area */}
         {result && (
           <div className="mb-6">
-            <Card className="bg-[#121218] border border-[#1e1e28]">
+            <Card className="bg-card border border-border">
               <CardContent className="p-4">
                 {feedbackStatus === "sent" ? (
                   <div className="space-y-3">
                     <p className="text-center text-sm text-green-500 font-medium">Feedback enviado: Aguardando...</p>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" onClick={() => submitFeedback("win")} className={`border-[#1e1e28] ${feedback === "win" ? "bg-green-500/20 border-green-500 text-green-400" : "text-gray-300 hover:bg-green-500/10 hover:border-green-500/50"}`}>
+                      <Button variant="outline" onClick={() => submitFeedback("win")} className={`border-border ${feedback === "win" ? "bg-green-500/20 border-green-500 text-green-400" : "text-muted-foreground hover:bg-green-500/10 hover:border-green-500/50"}`}>
                         <CheckCircle className="mr-2 h-4 w-4" /> Acertou
                       </Button>
-                      <Button variant="outline" onClick={() => submitFeedback("loss")} className={`border-[#1e1e28] ${feedback === "loss" ? "bg-red-500 border-red-500 text-white" : "text-gray-300 hover:bg-red-500/10 hover:border-red-500/50"}`}>
+                      <Button variant="outline" onClick={() => submitFeedback("loss")} className={`border-border ${feedback === "loss" ? "bg-red-500 border-red-500 text-foreground" : "text-muted-foreground hover:bg-red-500/10 hover:border-red-500/50"}`}>
                         <XCircle className="mr-2 h-4 w-4" /> Errou
                       </Button>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" onClick={deleteAnalysis} className="border-[#1e1e28] text-red-400 hover:bg-red-500/10 hover:border-red-500/50">
+                      <Button variant="outline" onClick={deleteAnalysis} className="border-border text-red-400 hover:bg-red-500/10 hover:border-red-500/50">
                         <Trash2 className="mr-2 h-4 w-4" /> Excluir
                       </Button>
-                      <Button variant="outline" onClick={() => { setResult(null); setFeedback(null); setFeedbackStatus("idle"); }} className="border-[#1e1e28] text-gray-300 hover:bg-gray-500/10">
+                      <Button variant="outline" onClick={() => { setResult(null); setFeedback(null); setFeedbackStatus("idle"); }} className="border-border text-muted-foreground hover:bg-gray-500/10">
                         <XOctagon className="mr-2 h-4 w-4" /> Fechar
                       </Button>
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <p className="text-sm text-gray-400 text-center">A análise estava correta?</p>
+                    <p className="text-sm text-muted-foreground text-center">A análise estava correta?</p>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" onClick={() => submitFeedback("win")} className="border-[#1e1e28] text-gray-300 hover:bg-green-500/10 hover:border-green-500/50">
+                      <Button variant="outline" onClick={() => submitFeedback("win")} className="border-border text-muted-foreground hover:bg-green-500/10 hover:border-green-500/50">
                         <CheckCircle className="mr-2 h-4 w-4" /> Acertei
                       </Button>
-                      <Button variant="outline" onClick={() => submitFeedback("loss")} className="border-[#1e1e28] text-gray-300 hover:bg-red-500/10 hover:border-red-500/50">
+                      <Button variant="outline" onClick={() => submitFeedback("loss")} className="border-border text-muted-foreground hover:bg-red-500/10 hover:border-red-500/50">
                         <XCircle className="mr-2 h-4 w-4" /> Errei
                       </Button>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" onClick={deleteAnalysis} className="border-[#1e1e28] text-red-400 hover:bg-red-500/10 hover:border-red-500/50">
+                      <Button variant="outline" onClick={deleteAnalysis} className="border-border text-red-400 hover:bg-red-500/10 hover:border-red-500/50">
                         <Trash2 className="mr-2 h-4 w-4" /> Rejeitar
                       </Button>
-                      <Button variant="outline" onClick={() => { setResult(null); setCurrentAnalysisId(null); }} className="border-[#1e1e28] text-gray-300 hover:bg-gray-500/10">
+                      <Button variant="outline" onClick={() => { setResult(null); setCurrentAnalysisId(null); }} className="border-border text-muted-foreground hover:bg-gray-500/10">
                         <XOctagon className="mr-2 h-4 w-4" /> Fechar
                       </Button>
                     </div>
@@ -705,20 +707,20 @@ export default function AnalyzerPage() {
 
         {/* Performance Stats */}
         <div className="mb-6">
-          <Card className="bg-[#121218] border border-[#1e1e28]">
+          <Card className="bg-card border border-border">
             <CardContent className="p-4">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <p className="text-2xl font-bold text-white">{filteredMetrics.totalAnalyses}</p>
-                  <p className="text-xs text-gray-500">Análises</p>
+                  <p className="text-2xl font-bold text-foreground">{filteredMetrics.totalAnalyses}</p>
+                  <p className="text-xs text-muted-foreground">Análises</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-green-400">{filteredMetrics.wins}</p>
-                  <p className="text-xs text-gray-500">Acertos</p>
+                  <p className="text-xs text-muted-foreground">Acertos</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-red-400">{filteredMetrics.losses}</p>
-                  <p className="text-xs text-gray-500">Erros</p>
+                  <p className="text-xs text-muted-foreground">Erros</p>
                 </div>
               </div>
             </CardContent>
@@ -727,11 +729,11 @@ export default function AnalyzerPage() {
 
         {/* Performance Radar */}
         <div className="mb-6">
-          <Card className="bg-[#121218] border border-[#1e1e28]">
+          <Card className="bg-card border border-border">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#1a1a24] border border-[#1e1e28] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-muted border border-border flex items-center justify-center">
                     <Activity className="w-5 h-5 text-green-500" />
                   </div>
                   <h2 className="text-lg font-bold text-green-500" style={{ fontFamily: "monospace" }}>Radar de Performance</h2>
@@ -739,7 +741,7 @@ export default function AnalyzerPage() {
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="bg-[#08080c] border border-[#1e1e28] rounded px-3 py-1 text-sm text-white focus:outline-none focus:border-green-500"
+                  className="bg-background border border-border rounded px-3 py-1 text-sm text-foreground focus:outline-none focus:border-green-500"
                 >
                   <option value="Todas">Todas</option>
                   <option value="Hoje">Hoje</option>
@@ -755,33 +757,33 @@ export default function AnalyzerPage() {
                 <div className="flex flex-wrap justify-center gap-6">
                   <div className="flex flex-col items-center">
                     <CircularProgress value={filteredMetrics.hitRate} color="#22c55e" icon={<Target className="w-4 h-4 text-green-400" />} />
-                    <span className="text-xs text-gray-400 mt-2">Taxa de Acerto</span>
+                    <span className="text-xs text-muted-foreground mt-2">Taxa de Acerto</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <CircularProgress value={filteredMetrics.efficiency} color="#f59e0b" icon={<TrendingUp className="w-4 h-4 text-yellow-400" />} />
-                    <span className="text-xs text-gray-400 mt-2">Eficiência</span>
+                    <span className="text-xs text-muted-foreground mt-2">Eficiência</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <CircularProgress value={filteredMetrics.consistency} color="#3b82f6" icon={<BarChart3 className="w-4 h-4 text-blue-400" />} />
-                    <span className="text-xs text-gray-400 mt-2">Consistência</span>
+                    <span className="text-xs text-muted-foreground mt-2">Consistência</span>
                   </div>
                   <div className="flex flex-col items-center">
                     <CircularProgress value={filteredMetrics.neuralCalibration} color="#a855f7" icon={<Brain className="w-4 h-4 text-purple-400" />} />
-                    <span className="text-xs text-gray-400 mt-2">Calibração<br />Neural</span>
+                    <span className="text-xs text-muted-foreground mt-2">Calibração<br />Neural</span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#1e1e28] flex items-center justify-center gap-8">
+              <div className="mt-6 pt-4 border-t border-border flex items-center justify-center gap-8">
                 <div className="flex items-center gap-2">
                   <Zap className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-gray-400">
-                    <span className="text-white font-medium">{filteredMetrics.totalAnalyses}</span> análises rastreadas
+                  <span className="text-sm text-muted-foreground">
+                    <span className="text-foreground font-medium">{filteredMetrics.totalAnalyses}</span> análises rastreadas
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Activity className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-gray-400">
+                  <span className="text-sm text-muted-foreground">
                     Status da IA: <span className="text-green-500 font-medium">Sincronizando...</span>
                   </span>
                 </div>
@@ -793,15 +795,15 @@ export default function AnalyzerPage() {
         {/* History */}
         {history.length > 0 && (
           <div className="mb-6">
-            <Card className="bg-[#121218] border border-[#1e1e28]">
+            <Card className="bg-card border border-border">
               <CardContent className="p-4">
-                <h3 className="text-sm text-gray-400 mb-3">Histórico Recente</h3>
+                <h3 className="text-sm text-muted-foreground mb-3">Histórico Recente</h3>
                 <div className="space-y-2 max-h-48 overflow-y-auto">
                   {history.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-2 rounded bg-[#08080c] text-sm">
+                    <div key={item.id} className="flex items-center justify-between p-2 rounded bg-background text-sm">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-400">{item.fileName}</span>
-                        <Badge variant="secondary" className="bg-[#1a1a24] text-gray-300 border-0 text-xs">{item.timeframe}m</Badge>
+                        <span className="text-muted-foreground">{item.fileName}</span>
+                        <Badge variant="secondary" className="bg-muted text-muted-foreground border-0 text-xs">{item.timeframe}m</Badge>
                         <Badge className={item.result.direction === "CALL" ? "bg-green-500/20 text-green-400 border-0 text-xs" : "bg-red-500/20 text-red-400 border-0 text-xs"}>
                           {item.result.direction}
                         </Badge>
