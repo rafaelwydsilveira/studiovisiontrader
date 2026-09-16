@@ -163,6 +163,7 @@ export default function AnalyzerPage() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const [now, setNow] = useState(new Date());
+  const [autoAnalyze, setAutoAnalyze] = useState(false);
 
   useEffect(() => { localStorage.setItem("study-analyzer-timeframe", timeframe); }, [timeframe]);
 
@@ -239,7 +240,7 @@ export default function AnalyzerPage() {
         if (items[i].type.indexOf("image") !== -1) {
           e.preventDefault();
           const blob = items[i].getAsFile();
-          if (blob) loadImage(blob, `clipboard-${Date.now()}.png`);
+          if (blob) loadImage(blob, `clipboard-${Date.now()}.png`, true);
           break;
         }
       }
@@ -248,7 +249,14 @@ export default function AnalyzerPage() {
     return () => document.removeEventListener("paste", handlePaste);
   }, []);
 
-  const loadImage = (file: File, name: string) => {
+  useEffect(() => {
+    if (autoAnalyze && image && !isAnalyzing && !result) {
+      setAutoAnalyze(false);
+      analyzeImage();
+    }
+  }, [autoAnalyze, image, isAnalyzing, result]);
+
+  const loadImage = (file: File, name: string, shouldAutoAnalyze = false) => {
     const reader = new FileReader();
     reader.onload = () => {
       setImage(reader.result as string);
@@ -257,6 +265,7 @@ export default function AnalyzerPage() {
       setFeedback(null);
       setFeedbackStatus("idle");
       setComment("");
+      if (shouldAutoAnalyze) setAutoAnalyze(true);
     };
     reader.readAsDataURL(file);
   };
@@ -264,12 +273,12 @@ export default function AnalyzerPage() {
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith("image/")) loadImage(file, file.name);
+    if (file && file.type.startsWith("image/")) loadImage(file, file.name, true);
   }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) loadImage(file, file.name);
+    if (file) loadImage(file, file.name, true);
   };
 
   const removeImage = () => {
@@ -472,13 +481,16 @@ export default function AnalyzerPage() {
                     <Button variant="ghost" size="sm" onClick={removeImage} className="text-muted-foreground hover:text-red-400">
                       <X className="mr-1 h-4 w-4" /> Remover
                     </Button>
-                    <Button size="sm" onClick={analyzeImage} disabled={isAnalyzing} className="bg-green-500 hover:bg-green-600 text-black">
-                      {isAnalyzing ? (
-                        <><Loader2 className="mr-1 h-4 w-4 animate-spin" /> Analisando...</>
-                      ) : (
-                        <><Brain className="mr-1 h-4 w-4" /> Analisar</>
-                      )}
-                    </Button>
+                    {!isAnalyzing ? (
+                      <Button size="sm" onClick={analyzeImage} className="bg-green-500 hover:bg-green-600 text-black">
+                        <Brain className="mr-1 h-4 w-4" /> Analisar
+                      </Button>
+                    ) : (
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded bg-green-500/20 border border-green-500/50">
+                        <Loader2 className="h-4 w-4 animate-spin text-green-500" />
+                        <span className="text-sm text-green-500">Analisando...</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -492,7 +504,8 @@ export default function AnalyzerPage() {
                   <span className="text-lg">📋</span>
                   <span>Ou pressione Ctrl+V para colar uma imagem</span>
                 </div>
-                <p className="text-xs text-muted-foreground">Formatos aceitos: JPG, PNG, WEBP</p>
+                <p className="text-xs text-green-400/70 font-medium">A análise será iniciada automaticamente</p>
+                <p className="text-xs text-muted-foreground mt-2">Formatos aceitos: JPG, PNG, WEBP</p>
               </div>
             )}
           </CardContent>
